@@ -12,68 +12,110 @@
 
 using namespace std;
 
-class Sawerage
-{
-	Sump Sumps[3];
-	//test
 
-	void Draw();
+
+class Bacterium
+{
+public:
+	float pos_x;
+	float pos_y;
+	float angel;
+	char name[10] = "Bacterium";
+
+	int mass;
+	int speed;
+
+	virtual void Draw(HDC hdc, COLORREF Color) {};
+	//virtual void Move();
+	void TurnLeft();
+	void TurnRight();
+	void MoveForward();
+};
+
+class VeganBacterium : public Bacterium
+{
+public:
+	VeganBacterium(float x, float y, float a)
+	{
+		pos_x = x;
+		pos_y = y;
+		angel = a;
+		mass = 4;
+		speed = 6;
+	}
+	virtual void Draw(HDC hdc, COLORREF Color);
+};
+
+class PredatorBacterium : public Bacterium
+{
+public:
+	PredatorBacterium(float x, float y, float a)
+	{
+		pos_x = x;
+		pos_y = y;
+		angel = a;
+		mass = 6;
+		speed = 5;
+	}
+	virtual void Draw(HDC hdc, COLORREF Color);
+};
+
+class OmnivorousBacterium : public Bacterium
+{
+public:
+	OmnivorousBacterium(float x, float y, float a)
+	{
+		pos_x = x;
+		pos_y = y;
+		angel = a;
+		mass = 5;
+		speed = 5;
+	}
+	virtual void Draw(HDC hdc, COLORREF Color);
 };
 
 class Sump
 {
+public:
 	int pos_x;
 	int pos_y;
 
 	Bacterium Bacteriums[10];
 	int Type; // 0 - Vegan, 1 - Predator, 2 - Omnivorous//
 	COLORREF Color;
-	void Draw();
+
+	Sump(int x, int y,int type, COLORREF color)
+	{
+		Color = color;
+
+		pos_x = x;
+		pos_y = y;
+		Type = type;
+		for (int i = 0; i < 10; i++)
+		{
+			switch (Type)
+			{
+			case 0:
+				Bacteriums[i] = VeganBacterium(pos_x, pos_y, 0);
+				break;
+			case 1:
+				Bacteriums[i] = PredatorBacterium(pos_x, pos_y, 0);
+				break;
+			case 2:
+				Bacteriums[i] = OmnivorousBacterium(pos_x, pos_y, 0);
+				break;
+			}			
+		}		
+	}
+
+	void Draw(HDC hdc, COLORREF Color);
 };
 
-class Bacterium
+
+class Sawerage
 {
 public:
-	int pos_x;
-	int pos_y;
-	int angel;
+	Sump Sumps[3];
 
-	int mass;
-	int speed;
-
-	Bacterium()
-	{
-		mass = 5;
-		speed = 5;
-	}
-
-	void Draw();
-	void Move();
-};
-
-class VeganBacterium : Bacterium
-{
-	VeganBacterium()
-	{
-		mass = 4;
-		speed = 6;
-	}
-};
-
-class PreatorBacterium : Bacterium
-{
-	PreatorBacterium()
-	{
-		mass = 6;
-		speed = 5;
-	}
-};
-
-class OmnivorousBacterium : Bacterium
-{
-	OmnivorousBacterium()
-	{
-		mass = 5;
-		speed = 5;
-	}
+	void Draw(HDC hdc);
 };
